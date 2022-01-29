@@ -63,5 +63,29 @@ cat(paste0("(",round(mu_xbar-1.96*sqrt(sigma_xbar),6),", ",round(mu_xbar+1.96*sq
 
 These are pretty close. 
 
+Finally, we can actually plot the entire empirical pdf against the true pdf
+
+```{r}
+library(ggplot2)
+
+df = as.data.frame(xbar_i)
+colors = c("True" = "black", "Empirical" = "red")
+
+ggplot(df, aes(x =  xbar_i)) +
+  stat_density(aes(color = "Empirical"), geom = "line", position = "identity") +
+  stat_function(fun = dnorm,
+                args = list(mean = mu,
+                            sd = sigma/sqrt(n)),
+                aes(color = "True")) +
+  labs(title = "Empirical vs True Density of the Sample Mean",
+       x = "X",
+       y = "Density",
+       color = "Legend") +
+  scale_color_manual(values = colors) +
+  xlim(c(3,7))
+```
+
+So now we've shown not only that bootstrapping can accurately approximate the mean and variance of the sample mean, but the density is also approximately normally-distributed. 
+
 I think I've proved to myself that despite its simplicity, the bootstrap does in fact work to characterize estimators very well. This example was, of course, trivial because we know the sampling distribution of the sample mean due to the Central Limit Theorem, but if the sampling distribution is unknown, the bootstrap is a great tool. 
 

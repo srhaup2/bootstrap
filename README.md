@@ -44,7 +44,7 @@ mu_xbar = mean(xbar_i)
 mu_xbar
 ```
 
-    ## [1] 5.433632
+    ## [1] 4.882288
 
 Next we can estimate the variance of the sample mean
 
@@ -53,10 +53,10 @@ sigma_xbar = var(xbar_i)
 sigma_xbar
 ```
 
-    ## [1] 0.09358271
+    ## [1] 0.07751384
 
-We see that the bootstrap estimated mean, 5.4336325, and variance,
-0.0935827, are remarkably close to the true theoretical asymptotic mean,
+We see that the bootstrap estimated mean, 4.8822882, and variance,
+0.0775138, are remarkably close to the true theoretical asymptotic mean,
 5, and variance, 0.09.
 
 We can also use the 2.5% and 97.5% percentiles to estimate a 95%
@@ -67,7 +67,7 @@ quantile(xbar_i, c(.025, .975))
 ```
 
     ##     2.5%    97.5% 
-    ## 4.818661 6.014318
+    ## 4.340356 5.426361
 
 Let’s compare this to the confidence interval we would get from using
 the estimated variance.
@@ -76,9 +76,38 @@ the estimated variance.
 cat(paste0("(",round(mu_xbar-1.96*sqrt(sigma_xbar),6),", ",round(mu_xbar+1.96*sqrt(sigma_xbar),6),")"))
 ```
 
-    ## (4.834043, 6.033222)
+    ## (4.336599, 5.427978)
 
 These are pretty close.
+
+Finally, we can actually plot the entire empirical pdf against the true
+pdf
+
+``` r
+library(ggplot2)
+
+df = as.data.frame(xbar_i)
+colors = c("True" = "black", "Empirical" = "red")
+
+ggplot(df, aes(x =  xbar_i)) +
+  stat_density(aes(color = "Empirical"), geom = "line", position = "identity") +
+  stat_function(fun = dnorm,
+                args = list(mean = mu,
+                            sd = sigma/sqrt(n)),
+                aes(color = "True")) +
+  labs(title = "Empirical vs True Density of the Sample Mean",
+       x = "X",
+       y = "Density",
+       color = "Legend") +
+  scale_color_manual(values = colors) +
+  xlim(c(3,7))
+```
+
+![](README_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
+
+So now we’ve shown not only that bootstrapping can accurately
+approximate the mean and variance of the sample mean, but the density is
+also approximately normally-distributed.
 
 I think I’ve proved to myself that despite its simplicity, the bootstrap
 does in fact work to characterize estimators very well. This example

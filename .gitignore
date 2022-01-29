@@ -2,3 +2,5 @@
 .Rhistory
 .RData
 .Ruserdata
+bootstrap.Rproj
+.gitignore

@@ -1,3 +1,7 @@
+---
+output: github_document
+---
+
 ## Motivation
 
 I just learned about the boostrap, which appears to be a versatile and powerful technique. The purpose of this short notebook is to convince myself that it actually works. 
